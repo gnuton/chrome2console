@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Chrome2Console Status</title>
+  <link rel="stylesheet" href="popup.css">
+</head>
+<body>
+  <div class="container">
+    <header>
+      <h1>Chrome2Console</h1>
+      <div id="status-badge" class="badge disconnected">
+        <span class="pulse"></span>
+        <span id="status-text">Checking...</span>
+      </div>
+    </header>
+
+    <main id="content">
+      <div id="connected-view" class="hidden">
+        <p class="success-msg">Native host is active and ready.</p>
+        <p class="hint">Select text on any page and right-click to send it to your console.</p>
+      </div>
+
+      <div id="disconnected-view" class="hidden">
+        <p class="error-msg">Native host not found.</p>
+        <div class="instructions">
+          <h3>Setup Instructions</h3>
+          <ol>
+            <li>Open your terminal.</li>
+            <li>Run the setup script:
+              <div class="code-block">
+                <code id="setup-command">bash native-host/setup-native-host.sh kjffgpgcbidbhjadjeclcoiampcfolcc</code>
+                <button id="copy-btn" title="Copy to clipboard">📋</button>
+              </div>
+            </li>
+            <li>Reload the extension in <code>chrome://extensions</code>.</li>
+          </ol>
+        </div>
+      </div>
+    </main>
+
+    <footer>
+      <button id="check-btn" class="primary-btn">Check Connectivity</button>
+    </footer>
+  </div>
+  <script src="popup.js"></script>
+</body>
+</html>

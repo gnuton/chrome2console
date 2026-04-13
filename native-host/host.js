@@ -32,6 +32,12 @@ function sendResponse(response) {
  * Handles an incoming message from the Chrome extension.
  */
 async function handleMessage(message) {
+    // Handle ping for connectivity checks
+    if (message.type === 'ping') {
+        sendResponse({ status: 'ok' });
+        return;
+    }
+
     const { text } = message;
     if (typeof text !== 'string') {
         sendResponse({ error: 'Invalid input: text field missing or not a string.' });

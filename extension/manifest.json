@@ -7,8 +7,18 @@
     "nativeMessaging",
     "contextMenus",
     "activeTab",
-    "scripting"
+    "scripting",
+    "storage",
+    "alarms"
   ],
+  "action": {
+    "default_popup": "popup.html",
+    "default_icon": {
+      "16": "icons/icon-red.png",
+      "48": "icons/icon-red.png",
+      "128": "icons/icon-red.png"
+    }
+  },
   "background": {
     "service_worker": "background.js"
   },
@@ -19,8 +29,8 @@
     }
   ],
   "icons": {
-    "16": "icons/icon.png",
-    "48": "icons/icon.png",
-    "128": "icons/icon.png"
+    "16": "icons/icon-green.png",
+    "48": "icons/icon-green.png",
+    "128": "icons/icon-green.png"
   }
 }
