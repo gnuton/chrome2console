@@ -10,9 +10,7 @@
 const { spawn } = require('child_process');
 const path = require('path');
 
-// Configuration: The command to execute. 
-// For now, we point to our mock-app.sh in the same directory.
-const COMMAND_PATH = path.join(__dirname, 'mock-app.sh');
+// Configuration: The command to execute is now dynamic based on message input.
 
 /**
  * Sends a message back to the Chrome extension.
@@ -38,15 +36,39 @@ async function handleMessage(message) {
         return;
     }
 
-    const { text } = message;
+    const { text, app, customCommand } = message;
     if (typeof text !== 'string') {
         sendResponse({ error: 'Invalid input: text field missing or not a string.' });
         return;
     }
 
+    // Determine the command to run
+    let command;
+    let args = [];
+
+    const APP_MAP = {
+        'default': path.join(__dirname, 'mock-app.sh'),
+        'uppercase': path.join(__dirname, 'uppercase.sh'),
+        'lowercase': path.join(__dirname, 'lowercase.sh'),
+        'wordcount': path.join(__dirname, 'wordcount.sh'),
+        'gemini': path.join(__dirname, 'gemini.sh')
+    };
+
+    if (app === 'custom' && customCommand) {
+        command = '/bin/bash';
+        args = ['-c', customCommand];
+    } else if (APP_MAP[app]) {
+        command = '/bin/bash';
+        args = [APP_MAP[app]];
+    } else {
+        // Fallback to default
+        command = '/bin/bash';
+        args = [APP_MAP['default']];
+    }
+
     try {
         // Spawn the console application
-        const child = spawn('/bin/bash', [COMMAND_PATH]);
+        const child = spawn(command, args);
 
         let output = '';
         let errorOutput = '';
@@ -65,6 +87,10 @@ async function handleMessage(message) {
             } else {
                 sendResponse({ error: `Process exited with code ${code}: ${errorOutput}` });
             }
+        });
+
+        child.on('error', (err) => {
+            sendResponse({ error: `Failed to start process: ${err.message}` });
         });
 
         // Pipe the input text to the child process stdin

@@ -32,5 +32,14 @@
     "16": "icons/icon-green.png",
     "48": "icons/icon-green.png",
     "128": "icons/icon-green.png"
+  },
+  "commands": {
+    "run-send-to-console": {
+      "suggested_key": {
+        "default": "Alt+Shift+C",
+        "mac": "Command+Shift+C"
+      },
+      "description": "Send selected text to Console"
+    }
   }
 }

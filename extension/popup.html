@@ -2,45 +2,118 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>Chrome2Console Status</title>
+  <title>Chrome2Console</title>
   <link rel="stylesheet" href="popup.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Outfit:wght@600;700&display=swap" rel="stylesheet">
 </head>
 <body>
   <div class="container">
     <header>
-      <h1>Chrome2Console</h1>
-      <div id="status-badge" class="badge disconnected">
-        <span class="pulse"></span>
-        <span id="status-text">Checking...</span>
+      <div class="logo-area">
+        <h1>Chrome2Console</h1>
+        <div id="status-badge" class="badge disconnected">
+          <span class="status-dot"></span>
+          <span id="status-text">Disconnected</span>
+        </div>
       </div>
     </header>
 
     <main id="content">
+      <div class="selection-section">
+        <label for="app-select">Target Application</label>
+        <div class="select-wrapper">
+          <select id="app-select">
+            <option value="default">Default Mock Tool</option>
+            <option value="uppercase">Uppercase Converter</option>
+            <option value="lowercase">Lowercase Converter</option>
+            <option value="wordcount">Word Counter</option>
+            <option value="gemini">Gemini AI (Contextual)</option>
+            <option value="custom">-- Custom Command --</option>
+          </select>
+        </div>
+        
+        <div id="custom-command-container" class="hidden">
+          <label for="custom-command">Custom Shell Command</label>
+          <input type="text" id="custom-command" placeholder="e.g., python3 ~/script.py">
+        </div>
+      </div>
+
+      <div id="selection-actions" class="hidden">
+        <div class="card selection-card">
+          <div class="selection-header">
+            <h3>Selection Detected</h3>
+            <span class="selection-badge">Text Ready</span>
+          </div>
+          <div class="selection-preview">
+            <p id="selection-text-preview"></p>
+          </div>
+          <button id="run-btn" class="primary-btn">
+            <span id="btn-icon" class="btn-icon">⚡</span>
+            <span id="btn-text">Send to Console</span>
+            <div id="btn-loader" class="loader hidden"></div>
+          </button>
+        </div>
+      </div>
+
+      <div id="result-view" class="hidden">
+        <div class="card result-card">
+          <div class="result-header">
+            <h3>Output Received</h3>
+            <span class="result-badge">Success</span>
+          </div>
+          <div class="result-content">
+            <p id="result-text"></p>
+          </div>
+          <div class="result-actions">
+            <button id="copy-result-btn" class="secondary-btn">Copy Output</button>
+            <button id="close-btn" class="secondary-btn">Close</button>
+          </div>
+        </div>
+      </div>
+
+
       <div id="connected-view" class="hidden">
-        <p class="success-msg">Native host is active and ready.</p>
-        <p class="hint">Select text on any page and right-click to send it to your console.</p>
+        <div class="card status-card">
+          <p class="success-msg">Ready for action. Select text on any page and use the context menu.</p>
+        </div>
       </div>
 
       <div id="disconnected-view" class="hidden">
-        <p class="error-msg">Native host not found.</p>
-        <div class="instructions">
-          <h3>Setup Instructions</h3>
-          <ol>
-            <li>Open your terminal.</li>
-            <li>Run the setup script:
-              <div class="code-block">
-                <code id="setup-command">bash native-host/setup-native-host.sh kjffgpgcbidbhjadjeclcoiampcfolcc</code>
-                <button id="copy-btn" title="Copy to clipboard">📋</button>
-              </div>
-            </li>
-            <li>Reload the extension in <code>chrome://extensions</code>.</li>
-          </ol>
+        <div class="card error-card">
+          <p class="error-msg">Native host not found.</p>
+          <div class="setup-guide">
+            <h3>Quick Setup</h3>
+            <div class="cmd-box">
+              <code id="setup-command">bash native-host/setup-native-host.sh kjffgpgcbidbhjadjeclcoiampcfolcc</code>
+              <button id="copy-btn" title="Copy to clipboard">📋</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="settings-section">
+        <div class="setting-item">
+          <div class="setting-info">
+            <span class="setting-label">Floating Action Button</span>
+            <span class="setting-description">Show a quick-action icon near selected text</span>
+          </div>
+          <label class="switch">
+            <input type="checkbox" id="fab-toggle" checked>
+            <span class="slider round"></span>
+          </label>
+        </div>
+        
+        <div class="shortcut-info">
+          <span class="shortcut-label">Keyboard Shortcut</span>
+          <span class="shortcut-key">Alt + Shift + C</span>
         </div>
       </div>
     </main>
 
     <footer>
-      <button id="check-btn" class="primary-btn">Check Connectivity</button>
+      <button id="check-btn" class="secondary-btn">Refresh Connection</button>
     </footer>
   </div>
   <script src="popup.js"></script>
